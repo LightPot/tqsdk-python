@@ -94,7 +94,9 @@ class TqBacktest(object):
             await self._send_snapshot()
             async for pack in self._sim_send_chan:
                 self._logger.debug("TqBacktest message received: %s", pack)
-                if pack["aid"] == "subscribe_quote":
+                if pack["aid"] == "ins_query":
+                    await self._md_send_chan.send(pack)
+                elif pack["aid"] == "subscribe_quote":
                     self._diffs.append({
                         "ins_list": pack["ins_list"]
                     })
